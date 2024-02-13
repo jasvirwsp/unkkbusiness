@@ -505,9 +505,7 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                     controller:
                                         _model.dropDownValueController1 ??=
                                             FormFieldController<String>(
-                                      _model.dropDownValue1 ??=
-                                          columnClientServicesRecord
-                                              .quantityUnit,
+                                      _model.dropDownValue1 ??= 'Day',
                                     ),
                                     options: const [
                                       'Day',
@@ -563,7 +561,7 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                               child: FlutterFlowDropDown<String>(
                                 controller: _model.dropDownValueController2 ??=
                                     FormFieldController<String>(null),
-                                options: const ['', 'Remove Service'],
+                                options: const ['Remove Service'],
                                 onChanged: (val) =>
                                     setState(() => _model.dropDownValue2 = val),
                                 width: 100.0,
