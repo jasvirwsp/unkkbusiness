@@ -595,24 +595,12 @@ class _OnboardOneOffServicesListWidgetState
                                                                   final columnClientServicesRecord =
                                                                       columnClientServicesRecordList[
                                                                           columnIndex];
-                                                                  return wrapWithModel(
-                                                                    model: _model
-                                                                        .oneOffServiceCompModels
-                                                                        .getModel(
-                                                                      columnClientServicesRecord
-                                                                          .reference
-                                                                          .id,
-                                                                      columnIndex,
-                                                                    ),
-                                                                    updateCallback: () =>
-                                                                        setState(
-                                                                            () {}),
-                                                                    child:
-                                                                        OneOffServiceCompWidget(
-                                                                      key: Key(
-                                                                        'Keyku1_${columnClientServicesRecord.reference.id}',
-                                                                      ),
-                                                                    ),
+                                                                  return OneOffServiceCompWidget(
+                                                                    key: Key(
+                                                                        'Keyku1_${columnIndex}_of_${columnClientServicesRecordList.length}'),
+                                                                    clientServiceRef:
+                                                                        columnClientServicesRecord
+                                                                            .reference,
                                                                   );
                                                                 }),
                                                               ),

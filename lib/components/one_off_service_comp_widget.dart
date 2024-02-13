@@ -12,7 +12,12 @@ import 'one_off_service_comp_model.dart';
 export 'one_off_service_comp_model.dart';
 
 class OneOffServiceCompWidget extends StatefulWidget {
-  const OneOffServiceCompWidget({super.key});
+  const OneOffServiceCompWidget({
+    super.key,
+    this.clientServiceRef,
+  });
+
+  final DocumentReference? clientServiceRef;
 
   @override
   State<OneOffServiceCompWidget> createState() =>
@@ -50,7 +55,7 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
     context.watch<FFAppState>();
 
     return StreamBuilder<ClientServicesRecord>(
-      stream: ClientServicesRecord.getDocument(_model.clientServiceReff!),
+      stream: ClientServicesRecord.getDocument(widget.clientServiceRef!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -113,13 +118,8 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                               controller: _model.billingModeValueController ??=
                                   FormFieldController<String>(null),
                               options: const ['Automatic', 'Manual'],
-                              onChanged: (val) async {
-                                setState(() => _model.billingModeValue = val);
-                                await columnClientServicesRecord.reference
-                                    .update(createClientServicesRecordData(
-                                  billingMode: _model.billingModeValue,
-                                ));
-                              },
+                              onChanged: (val) =>
+                                  setState(() => _model.billingModeValue = val),
                               width: 120.0,
                               height: 30.0,
                               textStyle:
@@ -219,70 +219,6 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                                   .toString(),
                                             ),
                                             focusNode: _model.qtyFocusNode,
-                                            onChanged: (_) =>
-                                                EasyDebounce.debounce(
-                                              '_model.qtyController',
-                                              const Duration(milliseconds: 2000),
-                                              () async {
-                                                await columnClientServicesRecord
-                                                    .reference
-                                                    .update(
-                                                        createClientServicesRecordData(
-                                                  quantity: int.tryParse(_model
-                                                      .qtyController.text),
-                                                ));
-                                                _model.clientServices =
-                                                    await queryClientServicesRecordOnce(
-                                                  queryBuilder:
-                                                      (clientServicesRecord) =>
-                                                          clientServicesRecord
-                                                              .where(
-                                                                'clientRef',
-                                                                isEqualTo:
-                                                                    columnClientServicesRecord
-                                                                        .clientRef,
-                                                              )
-                                                              .where(
-                                                                'type',
-                                                                isEqualTo:
-                                                                    'one_off',
-                                                              ),
-                                                );
-                                                while (_model.clientServices!
-                                                        .length >=
-                                                    _model.serviceLoopCount) {
-                                                  _model.serviceTotal =
-                                                      await actions
-                                                          .createSubTotal(
-                                                    _model
-                                                        .clientServices![_model
-                                                            .serviceLoopCount]
-                                                        .quantity,
-                                                    _model
-                                                        .clientServices![_model
-                                                            .serviceLoopCount]
-                                                        .price,
-                                                  );
-                                                  setState(() {
-                                                    FFAppState()
-                                                            .oneOffSubTotal =
-                                                        (_model.serviceTotal!) +
-                                                            FFAppState()
-                                                                .oneOffSubTotal;
-                                                  });
-                                                  setState(() {
-                                                    _model.serviceLoopCount =
-                                                        _model.serviceLoopCount +
-                                                            1;
-                                                  });
-                                                }
-                                                _model.updatePage(() {
-                                                  _model.serviceLoopCount = 0;
-                                                });
-
-                                                setState(() {});
-                                              },
-                                            ),
                                             obscureText: false,
                                             decoration: InputDecoration(
                                               isDense: true,
@@ -402,19 +338,21 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                                                   'one_off',
                                                             ),
                                               );
-                                              while (_model
-                                                      .clientServices!.length >=
+                                              while (_model.clientServicesCopy!
+                                                      .length >=
                                                   _model.serviceLoopCount) {
-                                                _model.serviceTotalCopy =
+                                                _model.serviceTotal =
                                                     await actions
                                                         .createSubTotal(
                                                   _model
-                                                      .clientServices![_model
-                                                          .serviceLoopCount]
+                                                      .clientServicesCopy![
+                                                          _model
+                                                              .serviceLoopCount]
                                                       .quantity,
                                                   _model
-                                                      .clientServices![_model
-                                                          .serviceLoopCount]
+                                                      .clientServicesCopy![
+                                                          _model
+                                                              .serviceLoopCount]
                                                       .price,
                                                 );
                                                 setState(() {

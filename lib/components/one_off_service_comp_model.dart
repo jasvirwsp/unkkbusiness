@@ -23,10 +23,6 @@ class OneOffServiceCompModel extends FlutterFlowModel<OneOffServiceCompWidget> {
   FocusNode? qtyFocusNode;
   TextEditingController? qtyController;
   String? Function(BuildContext, String?)? qtyControllerValidator;
-  // Stores action output result for [Firestore Query - Query a collection] action in qty widget.
-  List<ClientServicesRecord>? clientServices;
-  // Stores action output result for [Custom Action - createSubTotal] action in qty widget.
-  double? serviceTotal;
   // State field(s) for amount widget.
   FocusNode? amountFocusNode;
   TextEditingController? amountController;
@@ -34,7 +30,7 @@ class OneOffServiceCompModel extends FlutterFlowModel<OneOffServiceCompWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in amount widget.
   List<ClientServicesRecord>? clientServicesCopy;
   // Stores action output result for [Custom Action - createSubTotal] action in amount widget.
-  double? serviceTotalCopy;
+  double? serviceTotal;
   // State field(s) for DropDown widget.
   String? dropDownValue1;
   FormFieldController<String>? dropDownValueController1;
