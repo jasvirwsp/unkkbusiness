@@ -249,7 +249,7 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                                               ),
                                                 );
                                                 while (_model.clientServices!
-                                                        .length >
+                                                        .length >=
                                                     _model.serviceLoopCount) {
                                                   _model.serviceTotal =
                                                       await actions
@@ -403,7 +403,7 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                                             ),
                                               );
                                               while (_model
-                                                      .clientServices!.length >
+                                                      .clientServices!.length >=
                                                   _model.serviceLoopCount) {
                                                 _model.serviceTotalCopy =
                                                     await actions
