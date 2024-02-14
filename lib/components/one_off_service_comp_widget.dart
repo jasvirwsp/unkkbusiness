@@ -60,14 +60,8 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Center(
-            child: SizedBox(
-              width: 50.0,
-              height: 50.0,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  FlutterFlowTheme.of(context).primary,
-                ),
-              ),
+            child: LinearProgressIndicator(
+              color: FlutterFlowTheme.of(context).primary,
             ),
           );
         }
@@ -84,14 +78,8 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                   // Customize what your widget looks like when it's loading.
                   if (!snapshot.hasData) {
                     return Center(
-                      child: SizedBox(
-                        width: 50.0,
-                        height: 50.0,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            FlutterFlowTheme.of(context).primary,
-                          ),
-                        ),
+                      child: LinearProgressIndicator(
+                        color: FlutterFlowTheme.of(context).primary,
                       ),
                     );
                   }
@@ -116,7 +104,10 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                           children: [
                             FlutterFlowDropDown<String>(
                               controller: _model.billingModeValueController ??=
-                                  FormFieldController<String>(null),
+                                  FormFieldController<String>(
+                                _model.billingModeValue ??=
+                                    columnClientServicesRecord.billingMode,
+                              ),
                               options: const ['Automatic', 'Manual'],
                               onChanged: (val) =>
                                   setState(() => _model.billingModeValue = val),
@@ -155,7 +146,10 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                           children: [
                             FlutterFlowDropDown<String>(
                               controller: _model.priceTypeValueController ??=
-                                  FormFieldController<String>(null),
+                                  FormFieldController<String>(
+                                _model.priceTypeValue ??=
+                                    columnClientServicesRecord.priceType,
+                              ),
                               options: const [
                                 'Fixed',
                                 'Per Unit',
@@ -219,6 +213,73 @@ class _OneOffServiceCompWidgetState extends State<OneOffServiceCompWidget> {
                                                   .toString(),
                                             ),
                                             focusNode: _model.qtyFocusNode,
+                                            onChanged: (_) =>
+                                                EasyDebounce.debounce(
+                                              '_model.qtyController',
+                                              const Duration(milliseconds: 2000),
+                                              () async {
+                                                await columnClientServicesRecord
+                                                    .reference
+                                                    .update(
+                                                        createClientServicesRecordData(
+                                                  quantity: int.tryParse(_model
+                                                      .qtyController.text),
+                                                ));
+                                                _model.clientServicesCopyCopy =
+                                                    await queryClientServicesRecordOnce(
+                                                  queryBuilder:
+                                                      (clientServicesRecord) =>
+                                                          clientServicesRecord
+                                                              .where(
+                                                                'clientRef',
+                                                                isEqualTo:
+                                                                    columnClientServicesRecord
+                                                                        .clientRef,
+                                                              )
+                                                              .where(
+                                                                'type',
+                                                                isEqualTo:
+                                                                    'one_off',
+                                                              ),
+                                                );
+                                                while (_model
+                                                        .clientServicesCopy!
+                                                        .length >=
+                                                    _model.serviceLoopCount) {
+                                                  _model.serviceTotalCopy =
+                                                      await actions
+                                                          .createSubTotal(
+                                                    _model
+                                                        .clientServicesCopy![
+                                                            _model
+                                                                .serviceLoopCount]
+                                                        .quantity,
+                                                    _model
+                                                        .clientServicesCopy![
+                                                            _model
+                                                                .serviceLoopCount]
+                                                        .price,
+                                                  );
+                                                  setState(() {
+                                                    FFAppState()
+                                                            .oneOffSubTotal =
+                                                        (_model.serviceTotal!) +
+                                                            FFAppState()
+                                                                .oneOffSubTotal;
+                                                  });
+                                                  setState(() {
+                                                    _model.serviceLoopCount =
+                                                        _model.serviceLoopCount +
+                                                            1;
+                                                  });
+                                                }
+                                                _model.updatePage(() {
+                                                  _model.serviceLoopCount = 0;
+                                                });
+
+                                                setState(() {});
+                                              },
+                                            ),
                                             obscureText: false,
                                             decoration: InputDecoration(
                                               isDense: true,

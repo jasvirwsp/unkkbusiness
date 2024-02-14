@@ -103,6 +103,7 @@ class _LogoutConfirmWidgetState extends State<LogoutConfirmWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
@@ -136,6 +137,7 @@ class _LogoutConfirmWidgetState extends State<LogoutConfirmWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).error,
                                 width: 1.0,

@@ -120,15 +120,9 @@ class _OnboardOneOffServicesListWidgetState
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
                                   return Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
+                                    child: LinearProgressIndicator(
+                                      color:
                                           FlutterFlowTheme.of(context).primary,
-                                        ),
-                                      ),
                                     ),
                                   );
                                 }
@@ -535,79 +529,71 @@ class _OnboardOneOffServicesListWidgetState
                                                         const EdgeInsetsDirectional
                                                             .fromSTEB(0.0, 18.0,
                                                                 0.0, 32.0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        StreamBuilder<
-                                                            List<
-                                                                ClientServicesRecord>>(
-                                                          stream:
-                                                              queryClientServicesRecord(
-                                                            queryBuilder:
-                                                                (clientServicesRecord) =>
-                                                                    clientServicesRecord
-                                                                        .where(
-                                                                          'clientRef',
-                                                                          isEqualTo:
-                                                                              widget.clientRef,
-                                                                        )
-                                                                        .where(
-                                                                          'type',
-                                                                          isEqualTo:
-                                                                              'one_off',
-                                                                        ),
-                                                          ),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            // Customize what your widget looks like when it's loading.
-                                                            if (!snapshot
-                                                                .hasData) {
-                                                              return Center(
-                                                                child: SizedBox(
-                                                                  width: 50.0,
-                                                                  height: 50.0,
-                                                                  child:
-                                                                      CircularProgressIndicator(
-                                                                    valueColor:
-                                                                        AlwaysStoppedAnimation<
-                                                                            Color>(
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .primary,
+                                                    child: StreamBuilder<
+                                                        List<
+                                                            ClientServicesRecord>>(
+                                                      stream:
+                                                          queryClientServicesRecord(
+                                                        queryBuilder:
+                                                            (clientServicesRecord) =>
+                                                                clientServicesRecord
+                                                                    .where(
+                                                                      'clientRef',
+                                                                      isEqualTo:
+                                                                          widget
+                                                                              .clientRef,
+                                                                    )
+                                                                    .where(
+                                                                      'type',
+                                                                      isEqualTo:
+                                                                          'one_off',
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            }
-                                                            List<ClientServicesRecord>
-                                                                columnClientServicesRecordList =
-                                                                snapshot.data!;
+                                                      ),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        // Customize what your widget looks like when it's loading.
+                                                        if (!snapshot.hasData) {
+                                                          return Center(
+                                                            child:
+                                                                LinearProgressIndicator(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primary,
+                                                            ),
+                                                          );
+                                                        }
+                                                        List<ClientServicesRecord>
+                                                            columnClientServicesRecordList =
+                                                            snapshot.data!;
+                                                        return Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: List.generate(
+                                                              columnClientServicesRecordList
+                                                                  .length,
+                                                              (columnIndex) {
+                                                            final columnClientServicesRecord =
+                                                                columnClientServicesRecordList[
+                                                                    columnIndex];
                                                             return SingleChildScrollView(
                                                               child: Column(
                                                                 mainAxisSize:
                                                                     MainAxisSize
                                                                         .min,
-                                                                children: List.generate(
-                                                                    columnClientServicesRecordList
-                                                                        .length,
-                                                                    (columnIndex) {
-                                                                  final columnClientServicesRecord =
-                                                                      columnClientServicesRecordList[
-                                                                          columnIndex];
-                                                                  return OneOffServiceCompWidget(
+                                                                children: [
+                                                                  OneOffServiceCompWidget(
                                                                     key: Key(
                                                                         'Keyku1_${columnIndex}_of_${columnClientServicesRecordList.length}'),
                                                                     clientServiceRef:
                                                                         columnClientServicesRecord
                                                                             .reference,
-                                                                  );
-                                                                }),
+                                                                  ),
+                                                                ],
                                                               ),
                                                             );
-                                                          },
-                                                        ),
-                                                      ],
+                                                          }),
+                                                        );
+                                                      },
                                                     ),
                                                   ),
                                                 ),

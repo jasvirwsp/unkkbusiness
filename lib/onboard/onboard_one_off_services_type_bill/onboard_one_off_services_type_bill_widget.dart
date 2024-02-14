@@ -1,6 +1,7 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -148,77 +149,125 @@ class _OnboardOneOffServicesTypeBillWidgetState
                                               await ProposalRecord
                                                   .getDocumentOnce(widget
                                                       .proposalRef!.reference);
-
-                                          var clientsRecordReference =
-                                              ClientsRecord.collection.doc();
-                                          await clientsRecordReference.set({
-                                            ...createClientsRecordData(
-                                              firstName:
-                                                  widget.proposalRef?.firstName,
-                                              lastName:
-                                                  widget.proposalRef?.lastName,
-                                              dateOfBirth: widget
-                                                  .proposalRef?.dateOfBirth,
-                                              email: widget.proposalRef?.email,
-                                              proposalRef:
-                                                  widget.proposalRef?.reference,
+                                          _model.clientExist =
+                                              await queryClientsRecordOnce(
+                                            queryBuilder: (clientsRecord) =>
+                                                clientsRecord.where(
+                                              'email',
+                                              isEqualTo:
+                                                  _model.userProposal?.email,
                                             ),
-                                            ...mapToFirestore(
-                                              {
-                                                'createdAt': FieldValue
-                                                    .serverTimestamp(),
-                                              },
-                                            ),
-                                          });
-                                          _model.clientInfo = ClientsRecord
-                                              .getDocumentFromData({
-                                            ...createClientsRecordData(
-                                              firstName:
-                                                  widget.proposalRef?.firstName,
-                                              lastName:
-                                                  widget.proposalRef?.lastName,
-                                              dateOfBirth: widget
-                                                  .proposalRef?.dateOfBirth,
-                                              email: widget.proposalRef?.email,
-                                              proposalRef:
-                                                  widget.proposalRef?.reference,
-                                            ),
-                                            ...mapToFirestore(
-                                              {
-                                                'createdAt': DateTime.now(),
-                                              },
-                                            ),
-                                          }, clientsRecordReference);
-
-                                          await ClientServicesRecord.collection
-                                              .doc()
-                                              .set(
-                                                  createClientServicesRecordData(
-                                                type: widget.serviceType,
-                                                billingMode: 'on_acceptance',
-                                                clientRef: _model
-                                                    .clientInfo?.reference,
-                                                serviceRef: widget.serviceRef,
-                                                quantity: 1,
-                                                price: 0.0,
-                                              ));
-
-                                          context.pushNamed(
-                                            'onboardOneOffServicesList',
-                                            queryParameters: {
-                                              'clientRef': serializeParam(
-                                                _model.clientInfo?.reference,
-                                                ParamType.DocumentReference,
+                                            singleRecord: true,
+                                          ).then((s) => s.firstOrNull);
+                                          if (_model.clientExist?.email !=
+                                              widget.proposalRef?.email) {
+                                            var clientsRecordReference =
+                                                ClientsRecord.collection.doc();
+                                            await clientsRecordReference.set({
+                                              ...createClientsRecordData(
+                                                firstName: widget
+                                                    .proposalRef?.firstName,
+                                                lastName: widget
+                                                    .proposalRef?.lastName,
+                                                dateOfBirth: widget
+                                                    .proposalRef?.dateOfBirth,
+                                                email:
+                                                    widget.proposalRef?.email,
+                                                proposalRef: widget
+                                                    .proposalRef?.reference,
                                               ),
-                                              'proposalRef': serializeParam(
-                                                widget.proposalRef,
-                                                ParamType.Document,
+                                              ...mapToFirestore(
+                                                {
+                                                  'createdAt': FieldValue
+                                                      .serverTimestamp(),
+                                                },
                                               ),
-                                            }.withoutNulls,
-                                            extra: <String, dynamic>{
-                                              'proposalRef': widget.proposalRef,
-                                            },
-                                          );
+                                            });
+                                            _model.clientInfo = ClientsRecord
+                                                .getDocumentFromData({
+                                              ...createClientsRecordData(
+                                                firstName: widget
+                                                    .proposalRef?.firstName,
+                                                lastName: widget
+                                                    .proposalRef?.lastName,
+                                                dateOfBirth: widget
+                                                    .proposalRef?.dateOfBirth,
+                                                email:
+                                                    widget.proposalRef?.email,
+                                                proposalRef: widget
+                                                    .proposalRef?.reference,
+                                              ),
+                                              ...mapToFirestore(
+                                                {
+                                                  'createdAt': DateTime.now(),
+                                                },
+                                              ),
+                                            }, clientsRecordReference);
+
+                                            await ClientServicesRecord
+                                                .collection
+                                                .doc()
+                                                .set(
+                                                    createClientServicesRecordData(
+                                                  type: widget.serviceType,
+                                                  billingMode: 'on_acceptance',
+                                                  clientRef: _model
+                                                      .clientInfo?.reference,
+                                                  serviceRef: widget.serviceRef,
+                                                  quantity: 1,
+                                                  price: 0.0,
+                                                ));
+
+                                            context.pushNamed(
+                                              'onboardOneOffServicesList',
+                                              queryParameters: {
+                                                'clientRef': serializeParam(
+                                                  _model.clientInfo?.reference,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                                'proposalRef': serializeParam(
+                                                  widget.proposalRef,
+                                                  ParamType.Document,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'proposalRef':
+                                                    widget.proposalRef,
+                                              },
+                                            );
+                                          } else {
+                                            await ClientServicesRecord
+                                                .collection
+                                                .doc()
+                                                .set(
+                                                    createClientServicesRecordData(
+                                                  type: widget.serviceType,
+                                                  billingMode: 'on_acceptance',
+                                                  clientRef: _model
+                                                      .clientExist?.reference,
+                                                  serviceRef: widget.serviceRef,
+                                                  quantity: 1,
+                                                  price: 0.0,
+                                                ));
+
+                                            context.pushNamed(
+                                              'onboardOneOffServicesList',
+                                              queryParameters: {
+                                                'clientRef': serializeParam(
+                                                  _model.clientExist?.reference,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                                'proposalRef': serializeParam(
+                                                  widget.proposalRef,
+                                                  ParamType.Document,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'proposalRef':
+                                                    widget.proposalRef,
+                                              },
+                                            );
+                                          }
 
                                           setState(() {});
                                         },

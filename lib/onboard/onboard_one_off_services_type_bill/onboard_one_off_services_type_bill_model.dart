@@ -11,6 +11,8 @@ class OnboardOneOffServicesTypeBillModel
   final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - Read Document] action in Container widget.
   ProposalRecord? userProposal;
+  // Stores action output result for [Firestore Query - Query a collection] action in Container widget.
+  ClientsRecord? clientExist;
   // Stores action output result for [Backend Call - Create Document] action in Container widget.
   ClientsRecord? clientInfo;
 
