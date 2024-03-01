@@ -43,3 +43,6 @@ export '/clients/client_task_detail/client_task_detail_widget.dart'
 export '/taskboard/task_board/task_board_widget.dart' show TaskBoardWidget;
 export '/registration_form/registration/registration_widget.dart'
     show RegistrationWidget;
+export '/onboard/on_board_proposal_pricing/on_board_proposal_pricing_widget.dart'
+    show OnBoardProposalPricingWidget;
+export '/services/edit_service/edit_service_widget.dart' show EditServiceWidget;

@@ -6,7 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/navigation/navigation/navigation_widget.dart';
 import '/navigation/topbar/topbar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'new_onboard_model.dart';
 export 'new_onboard_model.dart';
@@ -28,8 +28,17 @@ class _NewOnboardWidgetState extends State<NewOnboardWidget> {
     super.initState();
     _model = createModel(context, () => NewOnboardModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        FFAppState().activeMenu = 'onboard';
+      });
+    });
+
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -41,15 +50,6 @@ class _NewOnboardWidgetState extends State<NewOnboardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -243,6 +243,9 @@ class _NewOnboardWidgetState extends State<NewOnboardWidget> {
                                               controller: _model
                                                   .paginatedDataTableController,
                                               data: proposals,
+                                              numRows:
+                                                  containerProposalRecordList
+                                                      .length,
                                               columnsBuilder: (onSortChanged) =>
                                                   [
                                                 DataColumn2(
@@ -415,6 +418,14 @@ class _NewOnboardWidgetState extends State<NewOnboardWidget> {
                                                               dynamic>{
                                                             'proposalRef':
                                                                 proposalsItem,
+                                                            kTransitionInfoKey:
+                                                                const TransitionInfo(
+                                                              hasTransition:
+                                                                  true,
+                                                              transitionType:
+                                                                  PageTransitionType
+                                                                      .fade,
+                                                            ),
                                                           },
                                                         );
                                                       },
@@ -477,6 +488,9 @@ class _NewOnboardWidgetState extends State<NewOnboardWidget> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0),
                                               addHorizontalDivider: true,
+                                              addTopAndBottomDivider: false,
+                                              hideDefaultHorizontalDivider:
+                                                  false,
                                               horizontalDividerColor:
                                                   FlutterFlowTheme.of(context)
                                                       .secondary,

@@ -31,22 +31,22 @@ class ServicesRecord extends FirestoreRecord {
   double get price => _price ?? 0.0;
   bool hasPrice() => _price != null;
 
-  // "taxRate" field.
-  double? _taxRate;
-  double get taxRate => _taxRate ?? 0.0;
-  bool hasTaxRate() => _taxRate != null;
-
   // "createdAt" field.
   DateTime? _createdAt;
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
 
+  // "taxRate" field.
+  String? _taxRate;
+  String get taxRate => _taxRate ?? '';
+  bool hasTaxRate() => _taxRate != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _description = snapshotData['description'] as String?;
     _price = castToType<double>(snapshotData['price']);
-    _taxRate = castToType<double>(snapshotData['taxRate']);
     _createdAt = snapshotData['createdAt'] as DateTime?;
+    _taxRate = snapshotData['taxRate'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -87,16 +87,16 @@ Map<String, dynamic> createServicesRecordData({
   String? name,
   String? description,
   double? price,
-  double? taxRate,
   DateTime? createdAt,
+  String? taxRate,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'name': name,
       'description': description,
       'price': price,
-      'taxRate': taxRate,
       'createdAt': createdAt,
+      'taxRate': taxRate,
     }.withoutNulls,
   );
 
@@ -111,13 +111,13 @@ class ServicesRecordDocumentEquality implements Equality<ServicesRecord> {
     return e1?.name == e2?.name &&
         e1?.description == e2?.description &&
         e1?.price == e2?.price &&
-        e1?.taxRate == e2?.taxRate &&
-        e1?.createdAt == e2?.createdAt;
+        e1?.createdAt == e2?.createdAt &&
+        e1?.taxRate == e2?.taxRate;
   }
 
   @override
   int hash(ServicesRecord? e) => const ListEquality()
-      .hash([e?.name, e?.description, e?.price, e?.taxRate, e?.createdAt]);
+      .hash([e?.name, e?.description, e?.price, e?.createdAt, e?.taxRate]);
 
   @override
   bool isValidKey(Object? o) => o is ServicesRecord;

@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 class OnboardServiceEmailModel
     extends FlutterFlowModel<OnboardServiceEmailWidget> {
+  ///  Local state fields for this page.
+
+  int loopCount = 0;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

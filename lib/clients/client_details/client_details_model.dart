@@ -26,6 +26,9 @@ class ClientDetailsModel extends FlutterFlowModel<ClientDetailsWidget> {
   // State field(s) for gender widget.
   String? genderValue;
   FormFieldController<String>? genderValueController;
+  // State field(s) for clientType widget.
+  List<String>? clientTypeValue;
+  FormFieldController<List<String>>? clientTypeValueController;
   // State field(s) for companyName widget.
   FocusNode? companyNameFocusNode;
   TextEditingController? companyNameController;

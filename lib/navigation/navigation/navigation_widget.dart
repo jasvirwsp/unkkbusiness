@@ -25,6 +25,8 @@ class _NavigationWidgetState extends State<NavigationWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => NavigationModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -62,11 +64,15 @@ class _NavigationWidgetState extends State<NavigationWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      setState(() {
-                        FFAppState().activeMenu = 'clients';
-                      });
-
-                      context.pushNamed('clientsList');
+                      context.goNamed(
+                        'clientsList',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                          ),
+                        },
+                      );
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(0.0),
@@ -87,11 +93,15 @@ class _NavigationWidgetState extends State<NavigationWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      setState(() {
-                        FFAppState().activeMenu = 'clients';
-                      });
-
-                      context.goNamed('clientsList');
+                      context.goNamed(
+                        'clientsList',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                          ),
+                        },
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -153,11 +163,15 @@ class _NavigationWidgetState extends State<NavigationWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      setState(() {
-                        FFAppState().activeMenu = 'onboard';
-                      });
-
-                      context.goNamed('newOnboard');
+                      context.goNamed(
+                        'newOnboard',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                          ),
+                        },
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -219,11 +233,15 @@ class _NavigationWidgetState extends State<NavigationWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      setState(() {
-                        FFAppState().activeMenu = 'taskboard';
-                      });
-
-                      context.goNamed('taskBoard');
+                      context.goNamed(
+                        'taskBoard',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                          ),
+                        },
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -285,11 +303,15 @@ class _NavigationWidgetState extends State<NavigationWidget> {
                     hoverColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onTap: () async {
-                      setState(() {
-                        FFAppState().activeMenu = 'services';
-                      });
-
-                      context.goNamed('servicesList');
+                      context.goNamed(
+                        'servicesList',
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: const TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                          ),
+                        },
+                      );
                     },
                     child: Container(
                       decoration: BoxDecoration(

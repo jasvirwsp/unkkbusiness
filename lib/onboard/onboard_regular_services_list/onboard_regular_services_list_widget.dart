@@ -3,9 +3,8 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/onboard/delete_proposal/delete_proposal_widget.dart';
+import '/onboard/delete_onboard_service/delete_onboard_service_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'onboard_regular_services_list_model.dart';
@@ -41,6 +40,8 @@ class _OnboardRegularServicesListWidgetState
 
     _model.textController4 ??= TextEditingController();
     _model.textFieldFocusNode4 ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -52,15 +53,6 @@ class _OnboardRegularServicesListWidgetState
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -93,24 +85,33 @@ class _OnboardRegularServicesListWidgetState
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Container(
-                                  width: 56.0,
-                                  height: 56.0,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0x33EEEEEE),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondary,
-                                      width: 1.0,
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    context.safePop();
+                                  },
+                                  child: Container(
+                                    width: 56.0,
+                                    height: 56.0,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0x33EEEEEE),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  alignment: const AlignmentDirectional(0.0, 0.0),
-                                  child: FaIcon(
-                                    FontAwesomeIcons.arrowLeft,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 28.0,
+                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.arrowLeft,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 28.0,
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -228,7 +229,8 @@ class _OnboardRegularServicesListWidgetState
                                                     MediaQuery.sizeOf(context)
                                                             .height *
                                                         1.0,
-                                                child: const DeleteProposalWidget(),
+                                                child:
+                                                    const DeleteOnboardServiceWidget(),
                                               ),
                                             ),
                                           );

@@ -27,6 +27,8 @@ class _RegistrationSuccessWidgetState extends State<RegistrationSuccessWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => RegistrationSuccessModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

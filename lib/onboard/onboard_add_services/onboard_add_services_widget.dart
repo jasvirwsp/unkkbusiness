@@ -5,9 +5,10 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'onboard_add_services_model.dart';
 export 'onboard_add_services_model.dart';
@@ -34,6 +35,8 @@ class _OnboardAddServicesWidgetState extends State<OnboardAddServicesWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnboardAddServicesModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -45,15 +48,6 @@ class _OnboardAddServicesWidgetState extends State<OnboardAddServicesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -76,22 +70,31 @@ class _OnboardAddServicesWidgetState extends State<OnboardAddServicesWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          width: 56.0,
-                          height: 56.0,
-                          decoration: BoxDecoration(
-                            color: const Color(0x33EEEEEE),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).secondary,
-                              width: 1.0,
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('newOnboard');
+                          },
+                          child: Container(
+                            width: 56.0,
+                            height: 56.0,
+                            decoration: BoxDecoration(
+                              color: const Color(0x33EEEEEE),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 1.0,
+                              ),
                             ),
-                          ),
-                          alignment: const AlignmentDirectional(0.0, 0.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.arrowLeft,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 28.0,
+                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.arrowLeft,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 28.0,
+                            ),
                           ),
                         ),
                         Padding(
@@ -231,23 +234,108 @@ class _OnboardAddServicesWidgetState extends State<OnboardAddServicesWidget> {
                                       0.0, 40.0, 0.0, 0.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      context.pushNamed(
-                                        'onboardAddServicesType',
-                                        queryParameters: {
-                                          'proposalRef': serializeParam(
-                                            widget.proposalRef,
-                                            ParamType.Document,
-                                          ),
-                                          'serviceRef': serializeParam(
-                                            functions.docIDtoRef(
-                                                _model.dropDownValue!),
-                                            ParamType.DocumentReference,
-                                          ),
-                                        }.withoutNulls,
-                                        extra: <String, dynamic>{
-                                          'proposalRef': widget.proposalRef,
-                                        },
-                                      );
+                                      _model.clientExist =
+                                          await queryClientsRecordOnce(
+                                        queryBuilder: (clientsRecord) =>
+                                            clientsRecord.where(
+                                          'proposalRef',
+                                          isEqualTo:
+                                              widget.proposalRef?.reference,
+                                        ),
+                                        singleRecord: true,
+                                      ).then((s) => s.firstOrNull);
+                                      if (_model.clientExist?.reference ==
+                                          null) {
+                                        context.goNamed(
+                                          'onboardAddServicesType',
+                                          queryParameters: {
+                                            'proposalRef': serializeParam(
+                                              widget.proposalRef,
+                                              ParamType.Document,
+                                            ),
+                                            'serviceRef': serializeParam(
+                                              functions.docIDtoRef(
+                                                  _model.dropDownValue!),
+                                              ParamType.DocumentReference,
+                                            ),
+                                          }.withoutNulls,
+                                          extra: <String, dynamic>{
+                                            'proposalRef': widget.proposalRef,
+                                            kTransitionInfoKey: const TransitionInfo(
+                                              hasTransition: true,
+                                              transitionType:
+                                                  PageTransitionType.fade,
+                                            ),
+                                          },
+                                        );
+                                      } else {
+                                        _model.clientServiceCount =
+                                            await queryClientServicesRecordCount(
+                                          queryBuilder:
+                                              (clientServicesRecord) =>
+                                                  clientServicesRecord
+                                                      .where(
+                                                        'clientRef',
+                                                        isEqualTo: _model
+                                                            .clientExist
+                                                            ?.reference,
+                                                      )
+                                                      .where(
+                                                        'serviceRef',
+                                                        isEqualTo: functions
+                                                            .docIDtoRef(_model
+                                                                .dropDownValue!),
+                                                      ),
+                                        );
+                                        if (_model.clientServiceCount == 0) {
+                                          context.pushNamed(
+                                            'onboardAddServicesType',
+                                            queryParameters: {
+                                              'proposalRef': serializeParam(
+                                                widget.proposalRef,
+                                                ParamType.Document,
+                                              ),
+                                              'serviceRef': serializeParam(
+                                                functions.docIDtoRef(
+                                                    _model.dropDownValue!),
+                                                ParamType.DocumentReference,
+                                              ),
+                                            }.withoutNulls,
+                                            extra: <String, dynamic>{
+                                              'proposalRef': widget.proposalRef,
+                                              kTransitionInfoKey:
+                                                  const TransitionInfo(
+                                                hasTransition: true,
+                                                transitionType:
+                                                    PageTransitionType.fade,
+                                              ),
+                                            },
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Service already exists.',
+                                                style: GoogleFonts.getFont(
+                                                  'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 16.0,
+                                                ),
+                                              ),
+                                              duration:
+                                                  const Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      setState(() {});
                                     },
                                     text: 'Next',
                                     options: FFButtonOptions(

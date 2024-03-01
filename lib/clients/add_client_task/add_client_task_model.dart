@@ -1,4 +1,6 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
 import 'add_client_task_widget.dart' show AddClientTaskWidget;
 import 'package:flutter/material.dart';
 
@@ -9,14 +11,20 @@ class AddClientTaskModel extends FlutterFlowModel<AddClientTaskWidget> {
   FocusNode? taskNameFocusNode;
   TextEditingController? taskNameController;
   String? Function(BuildContext, String?)? taskNameControllerValidator;
+  // State field(s) for assignee widget.
+  String? assigneeValue;
+  FormFieldController<String>? assigneeValueController;
   // State field(s) for dueDate widget.
   FocusNode? dueDateFocusNode;
   TextEditingController? dueDateController;
   String? Function(BuildContext, String?)? dueDateControllerValidator;
-  // State field(s) for assignee widget.
-  FocusNode? assigneeFocusNode;
-  TextEditingController? assigneeController;
-  String? Function(BuildContext, String?)? assigneeControllerValidator;
+  DateTime? datePicked;
+  // State field(s) for comment widget.
+  FocusNode? commentFocusNode;
+  TextEditingController? commentController;
+  String? Function(BuildContext, String?)? commentControllerValidator;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  TasksRecord? taskInfo;
 
   /// Initialization and disposal methods.
 
@@ -31,8 +39,8 @@ class AddClientTaskModel extends FlutterFlowModel<AddClientTaskWidget> {
     dueDateFocusNode?.dispose();
     dueDateController?.dispose();
 
-    assigneeFocusNode?.dispose();
-    assigneeController?.dispose();
+    commentFocusNode?.dispose();
+    commentController?.dispose();
   }
 
   /// Action blocks are added here.

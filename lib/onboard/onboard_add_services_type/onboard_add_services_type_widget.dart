@@ -2,7 +2,6 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'onboard_add_services_type_model.dart';
@@ -33,6 +32,8 @@ class _OnboardAddServicesTypeWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => OnboardAddServicesTypeModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -44,15 +45,6 @@ class _OnboardAddServicesTypeWidgetState
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -75,22 +67,31 @@ class _OnboardAddServicesTypeWidgetState
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Container(
-                          width: 56.0,
-                          height: 56.0,
-                          decoration: BoxDecoration(
-                            color: const Color(0x33EEEEEE),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: FlutterFlowTheme.of(context).secondary,
-                              width: 1.0,
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.safePop();
+                          },
+                          child: Container(
+                            width: 56.0,
+                            height: 56.0,
+                            decoration: BoxDecoration(
+                              color: const Color(0x33EEEEEE),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 1.0,
+                              ),
                             ),
-                          ),
-                          alignment: const AlignmentDirectional(0.0, 0.0),
-                          child: FaIcon(
-                            FontAwesomeIcons.arrowLeft,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 28.0,
+                            alignment: const AlignmentDirectional(0.0, 0.0),
+                            child: FaIcon(
+                              FontAwesomeIcons.arrowLeft,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 28.0,
+                            ),
                           ),
                         ),
                         Padding(
@@ -142,7 +143,12 @@ class _OnboardAddServicesTypeWidgetState
                                         hoverColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
-                                          context.pushNamed(
+                                          setState(() {
+                                            _model.borderOneOff = true;
+                                            _model.borderRegular = false;
+                                          });
+
+                                          context.goNamed(
                                             'onboardOneOffServicesTypeBill',
                                             queryParameters: {
                                               'serviceRef': serializeParam(
@@ -154,25 +160,38 @@ class _OnboardAddServicesTypeWidgetState
                                                 ParamType.Document,
                                               ),
                                               'serviceType': serializeParam(
-                                                'one_off',
+                                                'one off',
                                                 ParamType.String,
                                               ),
                                             }.withoutNulls,
                                             extra: <String, dynamic>{
                                               'proposalRef': widget.proposalRef,
+                                              kTransitionInfoKey:
+                                                  const TransitionInfo(
+                                                hasTransition: true,
+                                                transitionType:
+                                                    PageTransitionType.fade,
+                                              ),
                                             },
                                           );
                                         },
                                         child: Container(
                                           width: 236.0,
-                                          decoration: const BoxDecoration(
-                                            color: Color(0x1904F5C8),
-                                            borderRadius: BorderRadius.only(
+                                          decoration: BoxDecoration(
+                                            color: const Color(0x1904F5C8),
+                                            borderRadius: const BorderRadius.only(
                                               bottomLeft: Radius.circular(10.0),
                                               bottomRight:
                                                   Radius.circular(10.0),
                                               topLeft: Radius.circular(10.0),
                                               topRight: Radius.circular(10.0),
+                                            ),
+                                            border: Border.all(
+                                              color: _model.borderOneOff == true
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primary
+                                                  : const Color(0x00000000),
+                                              width: 2.0,
                                             ),
                                           ),
                                           child: Padding(
@@ -225,62 +244,107 @@ class _OnboardAddServicesTypeWidgetState
                                     Padding(
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           16.0, 0.0, 16.0, 0.0),
-                                      child: Container(
-                                        width: 236.0,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0x1904F5C8),
-                                          borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(10.0),
-                                            bottomRight: Radius.circular(10.0),
-                                            topLeft: Radius.circular(10.0),
-                                            topRight: Radius.circular(10.0),
-                                          ),
-                                          border: Border.all(
-                                            color: const Color(0x1A04F5C8),
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  24.0, 40.0, 24.0, 40.0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(0.0),
-                                                child: Image.asset(
-                                                  'assets/images/Group_289684.png',
-                                                  fit: BoxFit.cover,
-                                                ),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          setState(() {
+                                            _model.borderOneOff = false;
+                                            _model.borderRegular = true;
+                                          });
+
+                                          context.goNamed(
+                                            'onboardOneOffServicesTypeBill',
+                                            queryParameters: {
+                                              'serviceRef': serializeParam(
+                                                widget.serviceRef,
+                                                ParamType.DocumentReference,
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 32.0, 0.0, 0.0),
-                                                child: Text(
-                                                  'Regular',
+                                              'proposalRef': serializeParam(
+                                                widget.proposalRef,
+                                                ParamType.Document,
+                                              ),
+                                              'serviceType': serializeParam(
+                                                'regular',
+                                                ParamType.String,
+                                              ),
+                                            }.withoutNulls,
+                                            extra: <String, dynamic>{
+                                              'proposalRef': widget.proposalRef,
+                                              kTransitionInfoKey:
+                                                  const TransitionInfo(
+                                                hasTransition: true,
+                                                transitionType:
+                                                    PageTransitionType.fade,
+                                              ),
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 236.0,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0x1904F5C8),
+                                            borderRadius: const BorderRadius.only(
+                                              bottomLeft: Radius.circular(10.0),
+                                              bottomRight:
+                                                  Radius.circular(10.0),
+                                              topLeft: Radius.circular(10.0),
+                                              topRight: Radius.circular(10.0),
+                                            ),
+                                            border: Border.all(
+                                              color: _model.borderRegular ==
+                                                      true
+                                                  ? FlutterFlowTheme.of(context)
+                                                      .primary
+                                                  : const Color(0x00000000),
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsetsDirectional.fromSTEB(
+                                                    24.0, 40.0, 24.0, 40.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          0.0),
+                                                  child: Image.asset(
+                                                    'assets/images/Group_289684.png',
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 32.0, 0.0, 0.0),
+                                                  child: Text(
+                                                    'Regular',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primary,
+                                                        ),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'Multiple schedules service billing',
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .headlineSmall
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                      ),
+                                                      .bodyMedium,
                                                 ),
-                                              ),
-                                              Text(
-                                                'Multiple schedules service billing',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

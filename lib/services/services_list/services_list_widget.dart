@@ -1,10 +1,13 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/navigation/navigation/navigation_widget.dart';
 import '/navigation/topbar/topbar_widget.dart';
+import '/services/service_action/service_action_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'services_list_model.dart';
@@ -27,8 +30,17 @@ class _ServicesListWidgetState extends State<ServicesListWidget> {
     super.initState();
     _model = createModel(context, () => ServicesListModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        FFAppState().activeMenu = 'services';
+      });
+    });
+
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -40,15 +52,6 @@ class _ServicesListWidgetState extends State<ServicesListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -213,7 +216,17 @@ class _ServicesListWidgetState extends State<ServicesListWidget> {
                                             8.0, 0.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            context.pushNamed('addService');
+                                            context.goNamed(
+                                              'addService',
+                                              extra: <String, dynamic>{
+                                                kTransitionInfoKey:
+                                                    const TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType:
+                                                      PageTransitionType.fade,
+                                                ),
+                                              },
+                                            );
                                           },
                                           text: '+ Add Service',
                                           options: FFButtonOptions(
@@ -405,324 +418,259 @@ class _ServicesListWidgetState extends State<ServicesListWidget> {
                                       Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(
                                             0.0, 18.0, 0.0, 0.0),
-                                        child: ListView(
-                                          padding: EdgeInsets.zero,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.vertical,
-                                          children: [
-                                            Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Column(
+                                        child:
+                                            StreamBuilder<List<ServicesRecord>>(
+                                          stream: queryServicesRecord(),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 40.0,
+                                                  height: 40.0,
+                                                  child: SpinKitFadingCircle(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .alternate,
+                                                    size: 40.0,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            List<ServicesRecord>
+                                                listViewServicesRecordList =
+                                                snapshot.data!;
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.vertical,
+                                              itemCount:
+                                                  listViewServicesRecordList
+                                                      .length,
+                                              itemBuilder:
+                                                  (context, listViewIndex) {
+                                                final listViewServicesRecord =
+                                                    listViewServicesRecordList[
+                                                        listViewIndex];
+                                                return Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  14.0,
-                                                                  0.0,
-                                                                  14.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        8.0,
-                                                                        0.0),
-                                                            child: Container(
-                                                              width: MediaQuery
-                                                                          .sizeOf(
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      14.0,
+                                                                      0.0,
+                                                                      14.0),
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            0.0,
+                                                                            8.0,
+                                                                            0.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: MediaQuery.sizeOf(
                                                                               context)
-                                                                      .width *
-                                                                  0.3,
-                                                              decoration:
-                                                                  const BoxDecoration(),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                children: [
-                                                                  Theme(
-                                                                    data:
-                                                                        ThemeData(
-                                                                      checkboxTheme:
-                                                                          CheckboxThemeData(
-                                                                        visualDensity:
-                                                                            VisualDensity.compact,
-                                                                        materialTapTargetSize:
-                                                                            MaterialTapTargetSize.shrinkWrap,
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(4.0),
+                                                                          .width *
+                                                                      0.3,
+                                                                  decoration:
+                                                                      const BoxDecoration(),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    children: [
+                                                                      Theme(
+                                                                        data:
+                                                                            ThemeData(
+                                                                          checkboxTheme:
+                                                                              CheckboxThemeData(
+                                                                            visualDensity:
+                                                                                VisualDensity.compact,
+                                                                            materialTapTargetSize:
+                                                                                MaterialTapTargetSize.shrinkWrap,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(4.0),
+                                                                            ),
+                                                                          ),
+                                                                          unselectedWidgetColor:
+                                                                              FlutterFlowTheme.of(context).secondary,
+                                                                        ),
+                                                                        child:
+                                                                            Checkbox(
+                                                                          value: _model.checkboxValueMap2[listViewServicesRecord] ??=
+                                                                              false,
+                                                                          onChanged:
+                                                                              (newValue) async {
+                                                                            setState(() =>
+                                                                                _model.checkboxValueMap2[listViewServicesRecord] = newValue!);
+                                                                          },
+                                                                          activeColor:
+                                                                              FlutterFlowTheme.of(context).primaryText,
+                                                                          checkColor:
+                                                                              FlutterFlowTheme.of(context).info,
                                                                         ),
                                                                       ),
-                                                                      unselectedWidgetColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .secondary,
-                                                                    ),
-                                                                    child:
-                                                                        Checkbox(
-                                                                      value: _model
-                                                                              .checkboxValue2 ??=
-                                                                          false,
-                                                                      onChanged:
-                                                                          (newValue) async {
-                                                                        setState(() =>
-                                                                            _model.checkboxValue2 =
-                                                                                newValue!);
-                                                                      },
-                                                                      activeColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .primaryText,
-                                                                      checkColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .info,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    'Commercial Cleaning - Additional Floor Cleaning',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              'Fixed',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              'Automatic',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              '\$500.00',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                FaIcon(
-                                                                  FontAwesomeIcons
-                                                                      .ellipsisV,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  size: 24.0,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Divider(
-                                                      height: 2.0,
-                                                      thickness: 1.0,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondary,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  14.0,
-                                                                  0.0,
-                                                                  14.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        8.0,
-                                                                        0.0),
-                                                            child: Container(
-                                                              width: MediaQuery
-                                                                          .sizeOf(
-                                                                              context)
-                                                                      .width *
-                                                                  0.3,
-                                                              decoration:
-                                                                  const BoxDecoration(),
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                children: [
-                                                                  Theme(
-                                                                    data:
-                                                                        ThemeData(
-                                                                      checkboxTheme:
-                                                                          CheckboxThemeData(
-                                                                        visualDensity:
-                                                                            VisualDensity.compact,
-                                                                        materialTapTargetSize:
-                                                                            MaterialTapTargetSize.shrinkWrap,
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(4.0),
-                                                                        ),
+                                                                      Text(
+                                                                        listViewServicesRecord
+                                                                            .name,
+                                                                        style: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium,
                                                                       ),
-                                                                      unselectedWidgetColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .secondary,
-                                                                    ),
-                                                                    child:
-                                                                        Checkbox(
-                                                                      value: _model
-                                                                              .checkboxValue3 ??=
-                                                                          false,
-                                                                      onChanged:
-                                                                          (newValue) async {
-                                                                        setState(() =>
-                                                                            _model.checkboxValue3 =
-                                                                                newValue!);
-                                                                      },
-                                                                      activeColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .primaryText,
-                                                                      checkColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .info,
-                                                                    ),
+                                                                    ],
                                                                   ),
-                                                                  Text(
-                                                                    'Commercial Cleaning - Additional Floor Cleaning',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              'Fixed',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              'Automatic',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              '\$500.00',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium,
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                FaIcon(
-                                                                  FontAwesomeIcons
-                                                                      .ellipsisV,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  size: 24.0,
                                                                 ),
-                                                              ],
-                                                            ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  'Fixed',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium,
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  'Automatic',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium,
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    formatNumber(
+                                                                      listViewServicesRecord
+                                                                          .price,
+                                                                      formatType:
+                                                                          FormatType
+                                                                              .decimal,
+                                                                      decimalType:
+                                                                          DecimalType
+                                                                              .periodDecimal,
+                                                                      currency:
+                                                                          '\$',
+                                                                    ),
+                                                                    '0.0',
+                                                                  ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium,
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Align(
+                                                                  alignment:
+                                                                      const AlignmentDirectional(
+                                                                          1.0,
+                                                                          0.0),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            16.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      splashColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      focusColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      hoverColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      highlightColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      onTap:
+                                                                          () async {
+                                                                        await showModalBottomSheet(
+                                                                          isScrollControlled:
+                                                                              true,
+                                                                          backgroundColor:
+                                                                              Colors.transparent,
+                                                                          enableDrag:
+                                                                              false,
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (context) {
+                                                                            return GestureDetector(
+                                                                              onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
+                                                                              child: Padding(
+                                                                                padding: MediaQuery.viewInsetsOf(context),
+                                                                                child: SizedBox(
+                                                                                  height: MediaQuery.sizeOf(context).height * 1.0,
+                                                                                  child: ServiceActionWidget(
+                                                                                    serviceRef: listViewServicesRecord.reference,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        ).then((value) =>
+                                                                            safeSetState(() {}));
+                                                                      },
+                                                                      child:
+                                                                          FaIcon(
+                                                                        FontAwesomeIcons
+                                                                            .ellipsisV,
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryText,
+                                                                        size:
+                                                                            24.0,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Divider(
-                                                      height: 2.0,
-                                                      thickness: 1.0,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                        ),
+                                                        Divider(
+                                                          height: 2.0,
+                                                          thickness: 1.0,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .secondary,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                );
+                                              },
+                                            );
+                                          },
                                         ),
                                       ),
                                       Padding(

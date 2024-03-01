@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 
 class OnboardAddServicesTypeModel
     extends FlutterFlowModel<OnboardAddServicesTypeWidget> {
+  ///  Local state fields for this page.
+
+  bool borderOneOff = false;
+
+  bool borderRegular = false;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

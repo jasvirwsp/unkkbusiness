@@ -1,15 +1,23 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/onboard/delete_onboard_proposal/delete_onboard_proposal_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'onboard_service_terms_model.dart';
 export 'onboard_service_terms_model.dart';
 
 class OnboardServiceTermsWidget extends StatefulWidget {
-  const OnboardServiceTermsWidget({super.key});
+  const OnboardServiceTermsWidget({
+    super.key,
+    required this.clientServices,
+    required this.clientRef,
+  });
+
+  final List<DocumentReference>? clientServices;
+  final DocumentReference? clientRef;
 
   @override
   State<OnboardServiceTermsWidget> createState() =>
@@ -25,6 +33,8 @@ class _OnboardServiceTermsWidgetState extends State<OnboardServiceTermsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OnboardServiceTermsModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -36,15 +46,6 @@ class _OnboardServiceTermsWidgetState extends State<OnboardServiceTermsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (isiOS) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          systemStatusBarContrastEnforced: true,
-        ),
-      );
-    }
-
     context.watch<FFAppState>();
 
     return GestureDetector(
@@ -66,155 +67,232 @@ class _OnboardServiceTermsWidgetState extends State<OnboardServiceTermsWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 56.0,
-                                height: 56.0,
-                                decoration: BoxDecoration(
-                                  color: const Color(0x33EEEEEE),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                alignment: const AlignmentDirectional(0.0, 0.0),
-                                child: FaIcon(
-                                  FontAwesomeIcons.arrowLeft,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 28.0,
-                                ),
+                      StreamBuilder<ClientsRecord>(
+                        stream: ClientsRecord.getDocument(widget.clientRef!),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: LinearProgressIndicator(
+                                color: FlutterFlowTheme.of(context).primary,
                               ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'Send Proposal to Ralph Edwards',
-                                  style: FlutterFlowTheme.of(context)
-                                      .headlineSmall
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        fontWeight: FontWeight.w500,
+                            );
+                          }
+                          final rowClientsRecord = snapshot.data!;
+                          return Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Container(
+                                    width: 56.0,
+                                    height: 56.0,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0x33EEEEEE),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondary,
+                                        width: 1.0,
                                       ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    6.0, 0.0, 6.0, 0.0),
-                                child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
-                                  },
-                                  text: 'Next',
-                                  options: FFButtonOptions(
-                                    width: 124.0,
-                                    height: 40.0,
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: Colors.white,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                    borderSide: const BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(24.0),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    6.0, 0.0, 6.0, 0.0),
-                                child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
-                                  },
-                                  text: 'Preview',
-                                  options: FFButtonOptions(
-                                    width: 124.0,
-                                    height: 40.0,
-                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                    borderSide: BorderSide(
+                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.arrowLeft,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
-                                      width: 1.0,
+                                      size: 28.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(24.0),
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    6.0, 0.0, 0.0, 0.0),
-                                child: FFButtonWidget(
-                                  onPressed: () {
-                                    print('Button pressed ...');
-                                  },
-                                  text: 'Delete',
-                                  options: FFButtonOptions(
-                                    width: 124.0,
-                                    height: 40.0,
+                                  Padding(
                                     padding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: const Color(0x32FE8585),
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .override(
-                                          fontFamily: 'Poppins',
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                    borderSide: const BorderSide(
-                                      color: Color(0x34FE8585),
-                                      width: 1.0,
+                                        10.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      'Send Proposal to ${rowClientsRecord.firstName} ${rowClientsRecord.lastName}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .headlineSmall
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                     ),
-                                    borderRadius: BorderRadius.circular(24.0),
                                   ),
-                                ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        6.0, 0.0, 6.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        context.pushNamed(
+                                          'onboardServiceEmail',
+                                          queryParameters: {
+                                            'clientServices': serializeParam(
+                                              widget.clientServices,
+                                              ParamType.DocumentReference,
+                                              true,
+                                            ),
+                                            'clientRef': serializeParam(
+                                              widget.clientRef,
+                                              ParamType.DocumentReference,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      text: 'Next',
+                                      options: FFButtonOptions(
+                                        width: 124.0,
+                                        height: 40.0,
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        borderSide: const BorderSide(
+                                          color: Colors.transparent,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        6.0, 0.0, 6.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        context.pushNamed(
+                                          'onBoardProposalPricing',
+                                          queryParameters: {
+                                            'clientServiceRef': serializeParam(
+                                              widget.clientServices,
+                                              ParamType.DocumentReference,
+                                              true,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      text: 'Preview',
+                                      options: FFButtonOptions(
+                                        width: 124.0,
+                                        height: 40.0,
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        6.0, 0.0, 0.0, 0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        await showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          enableDrag: false,
+                                          context: context,
+                                          builder: (context) {
+                                            return GestureDetector(
+                                              onTap: () => _model.unfocusNode
+                                                      .canRequestFocus
+                                                  ? FocusScope.of(context)
+                                                      .requestFocus(
+                                                          _model.unfocusNode)
+                                                  : FocusScope.of(context)
+                                                      .unfocus(),
+                                              child: Padding(
+                                                padding:
+                                                    MediaQuery.viewInsetsOf(
+                                                        context),
+                                                child: SizedBox(
+                                                  height:
+                                                      MediaQuery.sizeOf(context)
+                                                              .height *
+                                                          1.0,
+                                                  child:
+                                                      DeleteOnboardProposalWidget(
+                                                    clientServiceRef:
+                                                        widget.clientServices!,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ).then((value) => safeSetState(() {}));
+                                      },
+                                      text: 'Delete',
+                                      options: FFButtonOptions(
+                                        width: 124.0,
+                                        height: 40.0,
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 0.0),
+                                        iconPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: const Color(0x32FE8585),
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .override(
+                                              fontFamily: 'Poppins',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                        elevation: 0.0,
+                                        borderSide: const BorderSide(
+                                          color: Color(0x34FE8585),
+                                          width: 1.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(24.0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                        ],
+                          );
+                        },
                       ),
                       Expanded(
                         child: Padding(

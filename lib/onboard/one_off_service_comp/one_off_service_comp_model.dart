@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'one_off_service_comp_widget.dart' show OneOffServiceCompWidget;
@@ -23,24 +22,16 @@ class OneOffServiceCompModel extends FlutterFlowModel<OneOffServiceCompWidget> {
   FocusNode? qtyFocusNode;
   TextEditingController? qtyController;
   String? Function(BuildContext, String?)? qtyControllerValidator;
-  // Stores action output result for [Firestore Query - Query a collection] action in qty widget.
-  List<ClientServicesRecord>? clientServicesCopyCopy;
-  // Stores action output result for [Custom Action - createSubTotal] action in qty widget.
-  double? serviceTotalCopy;
   // State field(s) for amount widget.
   FocusNode? amountFocusNode;
   TextEditingController? amountController;
   String? Function(BuildContext, String?)? amountControllerValidator;
-  // Stores action output result for [Firestore Query - Query a collection] action in amount widget.
-  List<ClientServicesRecord>? clientServicesCopy;
-  // Stores action output result for [Custom Action - createSubTotal] action in amount widget.
-  double? serviceTotal;
-  // State field(s) for DropDown widget.
-  String? dropDownValue1;
-  FormFieldController<String>? dropDownValueController1;
-  // State field(s) for DropDown widget.
-  String? dropDownValue2;
-  FormFieldController<String>? dropDownValueController2;
+  // State field(s) for qtyUnit widget.
+  String? qtyUnitValue;
+  FormFieldController<String>? qtyUnitValueController;
+  // State field(s) for action widget.
+  String? actionValue;
+  FormFieldController<String>? actionValueController;
 
   /// Initialization and disposal methods.
 

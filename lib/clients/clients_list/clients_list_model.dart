@@ -1,3 +1,5 @@
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_data_table.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/navigation/navigation/navigation_widget.dart';
 import '/navigation/topbar/topbar_widget.dart';
@@ -20,6 +22,10 @@ class ClientsListModel extends FlutterFlowModel<ClientsListWidget> {
   TabController? tabBarController;
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
+
+  // State field(s) for PaginatedDataTable widget.
+  final paginatedDataTableController =
+      FlutterFlowDataTableController<ClientsRecord>();
 
   /// Initialization and disposal methods.
 

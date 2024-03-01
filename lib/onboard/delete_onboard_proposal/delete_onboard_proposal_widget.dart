@@ -3,18 +3,25 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'delete_proposal_model.dart';
-export 'delete_proposal_model.dart';
+import 'delete_onboard_proposal_model.dart';
+export 'delete_onboard_proposal_model.dart';
 
-class DeleteProposalWidget extends StatefulWidget {
-  const DeleteProposalWidget({super.key});
+class DeleteOnboardProposalWidget extends StatefulWidget {
+  const DeleteOnboardProposalWidget({
+    super.key,
+    required this.clientServiceRef,
+  });
+
+  final List<DocumentReference>? clientServiceRef;
 
   @override
-  State<DeleteProposalWidget> createState() => _DeleteProposalWidgetState();
+  State<DeleteOnboardProposalWidget> createState() =>
+      _DeleteOnboardProposalWidgetState();
 }
 
-class _DeleteProposalWidgetState extends State<DeleteProposalWidget> {
-  late DeleteProposalModel _model;
+class _DeleteOnboardProposalWidgetState
+    extends State<DeleteOnboardProposalWidget> {
+  late DeleteOnboardProposalModel _model;
 
   @override
   void setState(VoidCallback callback) {
@@ -25,7 +32,9 @@ class _DeleteProposalWidgetState extends State<DeleteProposalWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => DeleteProposalModel());
+    _model = createModel(context, () => DeleteOnboardProposalModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -102,6 +111,7 @@ class _DeleteProposalWidgetState extends State<DeleteProposalWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
@@ -115,8 +125,24 @@ class _DeleteProposalWidgetState extends State<DeleteProposalWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               8.0, 0.0, 0.0, 0.0),
                           child: FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
+                            onPressed: () async {
+                              setState(() {
+                                _model.loopEndCount =
+                                    widget.clientServiceRef!.length;
+                              });
+                              while (
+                                  _model.loopStartCount < _model.loopEndCount) {
+                                await widget
+                                    .clientServiceRef![_model.loopStartCount]
+                                    .delete();
+                                setState(() {
+                                  _model.loopStartCount =
+                                      _model.loopStartCount + 1;
+                                });
+                              }
+                              Navigator.pop(context);
+
+                              context.goNamed('newOnboard');
                             },
                             text: 'Yes, Delete',
                             options: FFButtonOptions(
@@ -135,6 +161,7 @@ class _DeleteProposalWidgetState extends State<DeleteProposalWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).error,
                                 width: 1.0,

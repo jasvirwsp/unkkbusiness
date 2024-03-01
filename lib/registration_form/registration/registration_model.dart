@@ -41,6 +41,13 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
   TextEditingController? dateOfBirthController;
   String? Function(BuildContext, String?)? dateOfBirthControllerValidator;
   DateTime? datePicked1;
+  // State field(s) for gender widget.
+  String? genderValue;
+  FormFieldController<String>? genderValueController;
+  // State field(s) for contact widget.
+  FocusNode? contactFocusNode;
+  TextEditingController? contactController;
+  String? Function(BuildContext, String?)? contactControllerValidator;
   // State field(s) for email widget.
   FocusNode? emailFocusNode1;
   TextEditingController? emailController1;
@@ -123,15 +130,6 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
   TextEditingController? taxAdditionalInformationController1;
   String? Function(BuildContext, String?)?
       taxAdditionalInformationController1Validator;
-  String? _taxAdditionalInformationController1Validator(
-      BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return 'Field is required';
-    }
-
-    return null;
-  }
-
   // State field(s) for salutation widget.
   String? salutationValue2;
   FormFieldController<String>? salutationValueController2;
@@ -257,8 +255,6 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
     addressLine1Controller1Validator = _addressLine1Controller1Validator;
     suburbController1Validator = _suburbController1Validator;
     tFNnumberController1Validator = _tFNnumberController1Validator;
-    taxAdditionalInformationController1Validator =
-        _taxAdditionalInformationController1Validator;
     firatNameController2Validator = _firatNameController2Validator;
     lastNameController2Validator = _lastNameController2Validator;
     dateOfBirth2ControllerValidator = _dateOfBirth2ControllerValidator;
@@ -278,6 +274,9 @@ class RegistrationModel extends FlutterFlowModel<RegistrationWidget> {
 
     dateOfBirthFocusNode?.dispose();
     dateOfBirthController?.dispose();
+
+    contactFocusNode?.dispose();
+    contactController?.dispose();
 
     emailFocusNode1?.dispose();
     emailController1?.dispose();

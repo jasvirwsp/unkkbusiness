@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'add_service_widget.dart' show AddServiceWidget;
@@ -51,6 +52,8 @@ class AddServiceModel extends FlutterFlowModel<AddServiceWidget> {
   // State field(s) for taxRate widget.
   String? taxRateValue;
   FormFieldController<String>? taxRateValueController;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ServicesRecord? createdService;
 
   /// Initialization and disposal methods.
 

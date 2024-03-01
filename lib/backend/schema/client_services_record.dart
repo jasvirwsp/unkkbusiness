@@ -56,6 +56,16 @@ class ClientServicesRecord extends FirestoreRecord {
   DocumentReference? get serviceRef => _serviceRef;
   bool hasServiceRef() => _serviceRef != null;
 
+  // "createdAt" field.
+  DateTime? _createdAt;
+  DateTime? get createdAt => _createdAt;
+  bool hasCreatedAt() => _createdAt != null;
+
+  // "status" field.
+  String? _status;
+  String get status => _status ?? '';
+  bool hasStatus() => _status != null;
+
   void _initializeFields() {
     _type = snapshotData['type'] as String?;
     _billingMode = snapshotData['billingMode'] as String?;
@@ -65,6 +75,8 @@ class ClientServicesRecord extends FirestoreRecord {
     _quantityUnit = snapshotData['quantityUnit'] as String?;
     _clientRef = snapshotData['clientRef'] as DocumentReference?;
     _serviceRef = snapshotData['serviceRef'] as DocumentReference?;
+    _createdAt = snapshotData['createdAt'] as DateTime?;
+    _status = snapshotData['status'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -110,6 +122,8 @@ Map<String, dynamic> createClientServicesRecordData({
   String? quantityUnit,
   DocumentReference? clientRef,
   DocumentReference? serviceRef,
+  DateTime? createdAt,
+  String? status,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -121,6 +135,8 @@ Map<String, dynamic> createClientServicesRecordData({
       'quantityUnit': quantityUnit,
       'clientRef': clientRef,
       'serviceRef': serviceRef,
+      'createdAt': createdAt,
+      'status': status,
     }.withoutNulls,
   );
 
@@ -140,7 +156,9 @@ class ClientServicesRecordDocumentEquality
         e1?.price == e2?.price &&
         e1?.quantityUnit == e2?.quantityUnit &&
         e1?.clientRef == e2?.clientRef &&
-        e1?.serviceRef == e2?.serviceRef;
+        e1?.serviceRef == e2?.serviceRef &&
+        e1?.createdAt == e2?.createdAt &&
+        e1?.status == e2?.status;
   }
 
   @override
@@ -152,7 +170,9 @@ class ClientServicesRecordDocumentEquality
         e?.price,
         e?.quantityUnit,
         e?.clientRef,
-        e?.serviceRef
+        e?.serviceRef,
+        e?.createdAt,
+        e?.status
       ]);
 
   @override

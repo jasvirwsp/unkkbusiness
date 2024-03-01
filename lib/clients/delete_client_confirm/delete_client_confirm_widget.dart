@@ -7,7 +7,12 @@ import 'delete_client_confirm_model.dart';
 export 'delete_client_confirm_model.dart';
 
 class DeleteClientConfirmWidget extends StatefulWidget {
-  const DeleteClientConfirmWidget({super.key});
+  const DeleteClientConfirmWidget({
+    super.key,
+    this.clientRef,
+  });
+
+  final DocumentReference? clientRef;
 
   @override
   State<DeleteClientConfirmWidget> createState() =>
@@ -27,6 +32,8 @@ class _DeleteClientConfirmWidgetState extends State<DeleteClientConfirmWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => DeleteClientConfirmModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -103,6 +110,7 @@ class _DeleteClientConfirmWidgetState extends State<DeleteClientConfirmWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
@@ -116,8 +124,18 @@ class _DeleteClientConfirmWidgetState extends State<DeleteClientConfirmWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(
                               8.0, 0.0, 0.0, 0.0),
                           child: FFButtonWidget(
-                            onPressed: () {
-                              print('Button pressed ...');
+                            onPressed: () async {
+                              await widget.clientRef!.delete();
+
+                              context.goNamed(
+                                'clientsList',
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: const TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.fade,
+                                  ),
+                                },
+                              );
                             },
                             text: 'Yes, Delete',
                             options: FFButtonOptions(
@@ -136,6 +154,7 @@ class _DeleteClientConfirmWidgetState extends State<DeleteClientConfirmWidget> {
                                     fontSize: 13.0,
                                     fontWeight: FontWeight.w600,
                                   ),
+                              elevation: 0.0,
                               borderSide: BorderSide(
                                 color: FlutterFlowTheme.of(context).error,
                                 width: 1.0,

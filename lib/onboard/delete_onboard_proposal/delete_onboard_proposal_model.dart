@@ -1,8 +1,15 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'delete_proposal_widget.dart' show DeleteProposalWidget;
+import 'delete_onboard_proposal_widget.dart' show DeleteOnboardProposalWidget;
 import 'package:flutter/material.dart';
 
-class DeleteProposalModel extends FlutterFlowModel<DeleteProposalWidget> {
+class DeleteOnboardProposalModel
+    extends FlutterFlowModel<DeleteOnboardProposalWidget> {
+  ///  Local state fields for this component.
+
+  int loopEndCount = 0;
+
+  int loopStartCount = 0;
+
   /// Initialization and disposal methods.
 
   @override

@@ -26,6 +26,8 @@ class _LogoutConfirmWidgetState extends State<LogoutConfirmWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => LogoutConfirmModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

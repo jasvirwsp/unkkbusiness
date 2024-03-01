@@ -28,6 +28,8 @@ class _RegistrationSuccessMobileWidgetState
   void initState() {
     super.initState();
     _model = createModel(context, () => RegistrationSuccessMobileModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

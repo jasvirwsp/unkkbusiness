@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/navigation/navigation/navigation_widget.dart';
 import '/navigation/topbar/topbar_widget.dart';
@@ -19,9 +20,12 @@ class ServicesListModel extends FlutterFlowModel<ServicesListWidget> {
   // State field(s) for Checkbox widget.
   bool? checkboxValue1;
   // State field(s) for Checkbox widget.
-  bool? checkboxValue2;
-  // State field(s) for Checkbox widget.
-  bool? checkboxValue3;
+
+  Map<ServicesRecord, bool> checkboxValueMap2 = {};
+  List<ServicesRecord> get checkboxCheckedItems2 => checkboxValueMap2.entries
+      .where((e) => e.value)
+      .map((e) => e.key)
+      .toList();
 
   /// Initialization and disposal methods.
 

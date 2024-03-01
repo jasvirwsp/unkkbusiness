@@ -1,13 +1,22 @@
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/form_field_controller.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'add_client_task_model.dart';
 export 'add_client_task_model.dart';
 
 class AddClientTaskWidget extends StatefulWidget {
-  const AddClientTaskWidget({super.key});
+  const AddClientTaskWidget({
+    super.key,
+    this.clientRef,
+  });
+
+  final DocumentReference? clientRef;
 
   @override
   State<AddClientTaskWidget> createState() => _AddClientTaskWidgetState();
@@ -33,8 +42,10 @@ class _AddClientTaskWidgetState extends State<AddClientTaskWidget> {
     _model.dueDateController ??= TextEditingController();
     _model.dueDateFocusNode ??= FocusNode();
 
-    _model.assigneeController ??= TextEditingController();
-    _model.assigneeFocusNode ??= FocusNode();
+    _model.commentController ??= TextEditingController();
+    _model.commentFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -174,72 +185,89 @@ class _AddClientTaskWidgetState extends State<AddClientTaskWidget> {
                                     padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 4.0),
                                     child: Text(
-                                      'Due Date',
+                                      'Assignee',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium,
                                     ),
                                   ),
-                                  TextFormField(
-                                    controller: _model.dueDateController,
-                                    focusNode: _model.dueDateFocusNode,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      hintText: 'Enter name',
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: FlutterFlowTheme.of(context)
-                                                .alternate,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondary,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                  FutureBuilder<List<UsersRecord>>(
+                                    future: queryUsersRecordOnce(
+                                      queryBuilder: (usersRecord) =>
+                                          usersRecord.where(
+                                        'role',
+                                        isEqualTo: 'assignee',
                                       ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: const Color(0x34EEEEEE),
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              20.0, 20.0, 20.0, 20.0),
                                     ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                    keyboardType: TextInputType.datetime,
-                                    validator: _model.dueDateControllerValidator
-                                        .asValidator(context),
+                                    builder: (context, snapshot) {
+                                      // Customize what your widget looks like when it's loading.
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: LinearProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        );
+                                      }
+                                      List<UsersRecord>
+                                          assigneeUsersRecordList =
+                                          snapshot.data!;
+                                      return FlutterFlowDropDown<String>(
+                                        controller:
+                                            _model.assigneeValueController ??=
+                                                FormFieldController<String>(
+                                          _model.assigneeValue ??= '',
+                                        ),
+                                        options: List<String>.from(
+                                            assigneeUsersRecordList
+                                                .map((e) => e.reference.id)
+                                                .toList()),
+                                        optionLabels: assigneeUsersRecordList
+                                            .map((e) => e.displayName)
+                                            .toList(),
+                                        onChanged: (val) => setState(
+                                            () => _model.assigneeValue = val),
+                                        width: 420.0,
+                                        height: 60.0,
+                                        searchHintTextStyle:
+                                            FlutterFlowTheme.of(context)
+                                                .labelMedium
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondary,
+                                                ),
+                                        searchTextStyle:
+                                            FlutterFlowTheme.of(context)
+                                                .bodyMedium,
+                                        textStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                        hintText: 'Add Assignee',
+                                        searchHintText: 'Search',
+                                        searchCursorColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                        icon: Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          size: 24.0,
+                                        ),
+                                        fillColor: const Color(0xFFFCFCFC),
+                                        elevation: 2.0,
+                                        borderColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                        borderWidth: 1.0,
+                                        borderRadius: 8.0,
+                                        margin: const EdgeInsetsDirectional.fromSTEB(
+                                            16.0, 4.0, 16.0, 4.0),
+                                        hidesUnderline: true,
+                                        isOverButton: true,
+                                        isSearchable: true,
+                                        isMultiSelect: false,
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -256,18 +284,210 @@ class _AddClientTaskWidgetState extends State<AddClientTaskWidget> {
                                     padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 4.0),
                                     child: Text(
-                                      'Assignee',
+                                      'Due Date',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  1.0,
+                                          child: TextFormField(
+                                            controller:
+                                                _model.dueDateController,
+                                            focusNode: _model.dueDateFocusNode,
+                                            obscureText: false,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              hintText: 'Due Date',
+                                              hintStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .alternate,
+                                                      ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondary,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .error,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .error,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              filled: true,
+                                              fillColor: const Color(0x34EEEEEE),
+                                              contentPadding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(20.0, 20.0,
+                                                          20.0, 20.0),
+                                            ),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            validator: _model
+                                                .dueDateControllerValidator
+                                                .asValidator(context),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            12.0, 0.0, 0.0, 0.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            final datePickedDate =
+                                                await showDatePicker(
+                                              context: context,
+                                              initialDate: getCurrentTimestamp,
+                                              firstDate: DateTime(1900),
+                                              lastDate: DateTime(2050),
+                                              builder: (context, child) {
+                                                return wrapInMaterialDatePickerTheme(
+                                                  context,
+                                                  child!,
+                                                  headerBackgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primary,
+                                                  headerForegroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .info,
+                                                  headerTextStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .headlineLarge
+                                                          .override(
+                                                            fontFamily:
+                                                                'Poppins',
+                                                            fontSize: 32.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                  pickerBackgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryBackground,
+                                                  pickerForegroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryText,
+                                                  selectedDateTimeBackgroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryText,
+                                                  selectedDateTimeForegroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .info,
+                                                  actionButtonForegroundColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryText,
+                                                  iconSize: 24.0,
+                                                );
+                                              },
+                                            );
+
+                                            if (datePickedDate != null) {
+                                              safeSetState(() {
+                                                _model.datePicked = DateTime(
+                                                  datePickedDate.year,
+                                                  datePickedDate.month,
+                                                  datePickedDate.day,
+                                                );
+                                              });
+                                            }
+                                            setState(() {
+                                              _model.dueDateController?.text =
+                                                  dateTimeFormat('d/M/y',
+                                                      _model.datePicked);
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.calendar_today,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            size: 24.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 20.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 4.0),
+                                    child: Text(
+                                      'Add Comment',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium,
                                     ),
                                   ),
                                   TextFormField(
-                                    controller: _model.assigneeController,
-                                    focusNode: _model.assigneeFocusNode,
+                                    controller: _model.commentController,
+                                    focusNode: _model.commentFocusNode,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       isDense: true,
-                                      hintText: 'Enter name',
+                                      hintText: 'Add Comment',
                                       hintStyle: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -319,8 +539,8 @@ class _AddClientTaskWidgetState extends State<AddClientTaskWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
-                                    validator: _model
-                                        .assigneeControllerValidator
+                                    maxLines: 3,
+                                    validator: _model.commentControllerValidator
                                         .asValidator(context),
                                   ),
                                 ],
@@ -330,8 +550,39 @@ class _AddClientTaskWidgetState extends State<AddClientTaskWidget> {
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   0.0, 20.0, 0.0, 16.0),
                               child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
+                                onPressed: () async {
+                                  var tasksRecordReference =
+                                      TasksRecord.collection.doc();
+                                  await tasksRecordReference
+                                      .set(createTasksRecordData(
+                                    name: _model.taskNameController.text,
+                                    assignee: functions
+                                        .userIdtoRef(_model.assigneeValue!),
+                                    dueDate: _model.datePicked,
+                                    clientRef: widget.clientRef,
+                                    status: 'pending',
+                                  ));
+                                  _model.taskInfo =
+                                      TasksRecord.getDocumentFromData(
+                                          createTasksRecordData(
+                                            name:
+                                                _model.taskNameController.text,
+                                            assignee: functions.userIdtoRef(
+                                                _model.assigneeValue!),
+                                            dueDate: _model.datePicked,
+                                            clientRef: widget.clientRef,
+                                            status: 'pending',
+                                          ),
+                                          tasksRecordReference);
+
+                                  await CommentsRecord.createDoc(
+                                          _model.taskInfo!.reference)
+                                      .set(createCommentsRecordData(
+                                    info: _model.commentController.text,
+                                  ));
+                                  Navigator.pop(context);
+
+                                  setState(() {});
                                 },
                                 text: 'Add Task',
                                 options: FFButtonOptions(

@@ -115,6 +115,16 @@ class ProposalRecord extends FirestoreRecord {
   String get status => _status ?? '';
   bool hasStatus() => _status != null;
 
+  // "contact" field.
+  String? _contact;
+  String get contact => _contact ?? '';
+  bool hasContact() => _contact != null;
+
+  // "gender" field.
+  String? _gender;
+  String get gender => _gender ?? '';
+  bool hasGender() => _gender != null;
+
   void _initializeFields() {
     _salutation = snapshotData['salutation'] as String?;
     _firstName = snapshotData['firstName'] as String?;
@@ -136,6 +146,8 @@ class ProposalRecord extends FirestoreRecord {
     _taxAddtionalInfo = snapshotData['taxAddtionalInfo'] as String?;
     _createdAt = snapshotData['createdAt'] as DateTime?;
     _status = snapshotData['status'] as String?;
+    _contact = snapshotData['contact'] as String?;
+    _gender = snapshotData['gender'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -193,6 +205,8 @@ Map<String, dynamic> createProposalRecordData({
   String? taxAddtionalInfo,
   DateTime? createdAt,
   String? status,
+  String? contact,
+  String? gender,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -216,6 +230,8 @@ Map<String, dynamic> createProposalRecordData({
       'taxAddtionalInfo': taxAddtionalInfo,
       'createdAt': createdAt,
       'status': status,
+      'contact': contact,
+      'gender': gender,
     }.withoutNulls,
   );
 
@@ -246,7 +262,9 @@ class ProposalRecordDocumentEquality implements Equality<ProposalRecord> {
         e1?.investCrypto == e2?.investCrypto &&
         e1?.taxAddtionalInfo == e2?.taxAddtionalInfo &&
         e1?.createdAt == e2?.createdAt &&
-        e1?.status == e2?.status;
+        e1?.status == e2?.status &&
+        e1?.contact == e2?.contact &&
+        e1?.gender == e2?.gender;
   }
 
   @override
@@ -270,7 +288,9 @@ class ProposalRecordDocumentEquality implements Equality<ProposalRecord> {
         e?.investCrypto,
         e?.taxAddtionalInfo,
         e?.createdAt,
-        e?.status
+        e?.status,
+        e?.contact,
+        e?.gender
       ]);
 
   @override

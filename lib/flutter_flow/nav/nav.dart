@@ -161,12 +161,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'onboardServiceTerms',
           path: '/onboardServiceTerms',
-          builder: (context, params) => const OnboardServiceTermsWidget(),
+          builder: (context, params) => OnboardServiceTermsWidget(
+            clientServices: params.getParam<DocumentReference>('clientServices',
+                ParamType.DocumentReference, true, ['clientServices']),
+            clientRef: params.getParam(
+                'clientRef', ParamType.DocumentReference, false, ['clients']),
+          ),
         ),
         FFRoute(
           name: 'onboardServiceEmail',
           path: '/onboardServiceEmail',
-          builder: (context, params) => const OnboardServiceEmailWidget(),
+          builder: (context, params) => OnboardServiceEmailWidget(
+            clientServices: params.getParam<DocumentReference>('clientServices',
+                ParamType.DocumentReference, true, ['clientServices']),
+            clientRef: params.getParam(
+                'clientRef', ParamType.DocumentReference, false, ['clients']),
+          ),
         ),
         FFRoute(
           name: 'onboardRegularServicesList',
@@ -216,12 +226,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'clientDetails',
           path: '/clientDetails',
-          builder: (context, params) => const ClientDetailsWidget(),
+          builder: (context, params) => ClientDetailsWidget(
+            clientRef: params.getParam(
+                'clientRef', ParamType.DocumentReference, false, ['clients']),
+          ),
         ),
         FFRoute(
           name: 'clientTaskDetail',
           path: '/clientTaskDetail',
-          builder: (context, params) => const ClientTaskDetailWidget(),
+          builder: (context, params) => ClientTaskDetailWidget(
+            clientRef: params.getParam(
+                'clientRef', ParamType.DocumentReference, false, ['clients']),
+          ),
         ),
         FFRoute(
           name: 'taskBoard',
@@ -232,6 +248,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'registration',
           path: '/registration',
           builder: (context, params) => const RegistrationWidget(),
+        ),
+        FFRoute(
+          name: 'onBoardProposalPricing',
+          path: '/onBoardProposalPricing',
+          builder: (context, params) => OnBoardProposalPricingWidget(
+            clientServiceRef: params.getParam<DocumentReference>(
+                'clientServiceRef',
+                ParamType.DocumentReference,
+                true,
+                ['clientServices']),
+          ),
+        ),
+        FFRoute(
+          name: 'editService',
+          path: '/editService',
+          builder: (context, params) => EditServiceWidget(
+            serviceRef: params.getParam(
+                'serviceRef', ParamType.DocumentReference, false, ['services']),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -403,6 +438,7 @@ class FFRoute {
           return null;
         },
         pageBuilder: (context, state) {
+          fixStatusBarOniOS16AndBelow(context);
           final ffParams = FFParameters(state, asyncParams);
           final page = ffParams.hasFutures
               ? FutureBuilder(

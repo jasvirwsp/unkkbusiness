@@ -25,10 +25,4 @@ class FFAppState extends ChangeNotifier {
   set activeMenu(String value) {
     _activeMenu = value;
   }
-
-  double _oneOffSubTotal = 0.0;
-  double get oneOffSubTotal => _oneOffSubTotal;
-  set oneOffSubTotal(double value) {
-    _oneOffSubTotal = value;
-  }
 }
